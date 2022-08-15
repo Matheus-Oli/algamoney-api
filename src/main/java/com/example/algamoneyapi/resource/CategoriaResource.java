@@ -2,6 +2,7 @@ package com.example.algamoneyapi.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.algamoneyapi.model.Categoria;
 import com.example.algamoneyapi.repository.CategoriaRepository;
@@ -36,8 +37,10 @@ public class CategoriaResource {
 	}
 
 	@GetMapping("/{codigo}")
-	public Categoria buscarPeloCodigo(@PathVariable Long codigo) {
-		return categoriaRepository.findById(codigo).orElse(null);
+	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
+		Optional<Categoria> categoria = categoriaRepository.findById(codigo);
+
+		return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
 	}
 	
 }
